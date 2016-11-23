@@ -1,0 +1,23 @@
+{
+    "name": "schererosftwrae/cake-language-switcher",
+    "description": "LanguageSwitcher plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "require": {
+        "php": ">=7.0.0",
+        "cakephp/cakephp": ">=3.3.2 < 4.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "LanguageSwitcher\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LanguageSwitcher\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
