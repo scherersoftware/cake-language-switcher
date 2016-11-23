@@ -21,7 +21,7 @@ class LocalisationComponent extends Component
         'field' => 'language',
         'Cookie' => [
             'name' => 'choosen_language',
-            'cookie_lifetime' => (365 * 24 * 60 * 60)
+            'expires' => '+1 year'
         ]
     ];
 
