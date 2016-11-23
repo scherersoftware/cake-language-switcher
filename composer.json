@@ -1,5 +1,5 @@
 {
-    "name": "schererosftwrae/cake-language-switcher",
+    "name": "scherersoftware/cake-language-switcher",
     "description": "LanguageSwitcher plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
