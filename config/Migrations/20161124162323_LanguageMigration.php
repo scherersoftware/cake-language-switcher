@@ -1,22 +1,28 @@
 <?php
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Migrations\AbstractMigration;
 
 class LanguageMigration extends AbstractMigration
 {
 
     protected $_model = null;
+    protected $_config = null;
 
     public function init()
     {
-        $this->_model = TableRegistry::get(Configure::read('LanguageSwitcher.model'));
+        $this->_config = Hash::merge([
+            'model' => 'Users',
+            'field' => 'language'
+        ], Configure::read('LanguageSwitcher'));
+        $this->_model = TableRegistry::get($this->_config['model']);
     }
 
     public function up()
     {
         $this->table($this->_model->table())
-            ->addColumn(Configure::read('LanguageSwitcher.field'), 'string', [
+            ->addColumn($this->_config['field'], 'string', [
                 'default' => null,
                 'limit' => 20,
                 'null' => true,
@@ -27,7 +33,7 @@ class LanguageMigration extends AbstractMigration
     public function down()
     {
         $this->table($this->_model->table())
-            ->removeColumn(Configure::read('LanguageSwitcher.field'))
+            ->removeColumn($this->_config['field'])
             ->update();
     }
 }
