@@ -44,7 +44,7 @@ $this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
 ]);
 ```
 
-And use the element:
+To use the element:
 
 ```
 <?= $this->LanguageSwitcher->renderLanguageSwitcher(); ?>
