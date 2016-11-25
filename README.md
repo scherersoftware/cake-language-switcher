@@ -16,7 +16,7 @@ composer require scherersoftware/cake-language-switcher
 The next step is to load the plugin inside your bootstrap.php:
 
 ```
-bin/cake plugin load LanguageSwitcher
+bin/cake plugin load -b LanguageSwitcher
 ```
 
 Add the plugin to your AppView:
@@ -25,10 +25,23 @@ Add the plugin to your AppView:
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher');
 ```
 
-Optionally you can pass as second parameter your changed configurations:
+Optionally, you can pass an array of options: 
 
 ```
-$this->loadHelper('LanguageSwitcher.LanguageSwitcher', Configure::read('LanguageSwitcher'));
+$this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
+    'availableLanguages' => [
+        'en_US',
+        'de_DE'
+    ],
+    'displayNames' => [
+        'en_US' => 'English',
+        'de_DE' => 'Deutsch'
+    ],
+    'imageMapping' => [
+        'en_US' => 'United-States'
+        'de_DE' => 'Germany'
+    ]
+]);
 ```
 
 And use the element:
@@ -43,11 +56,11 @@ Next, you should migrate your database.
 bin/cake migrations migrate -p LanguageSwitcher
 ```
 
+Add the css file located under webroot/css to your layout file!
+
 ## Configuration Usage
 
-Inside your app.php you can add additional and change configs of the plugin.
-
-Default config:
+Inside your app.php add the following to change configs of the plugin:
 
 ```
 LanguageSwitcher => [
