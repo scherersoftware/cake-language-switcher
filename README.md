@@ -40,7 +40,7 @@ And use the element:
 Next, you should migrate your database.
 
 ```
-bin/cake migration migrate -p LanguageSwitcher
+bin/cake migrations migrate -p LanguageSwitcher
 ```
 
 ## Configuration Usage
