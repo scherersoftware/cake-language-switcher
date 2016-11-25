@@ -1,0 +1,9 @@
+/* Override some AdminLTE styles */
+@media (max-width: 767px) {
+    .dropdown-menu li a:hover {
+        background:#e1e3e9 !important
+    }
+    .dropdown-menu li a {
+        color:inherit !important
+    }
+}
