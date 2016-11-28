@@ -4,6 +4,7 @@ namespace LanguageSwitcher\View\Helper;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\Utility\Text;
 use Cake\View\Helper;
 use Cake\View\View;
@@ -50,5 +51,19 @@ class LanguageSwitcherHelper extends Helper
             'displayNames' => $this->config('displayNames'),
             'imageMapping' => $this->config('imageMapping')
         ]);
+    }
+
+    /**
+     * Merge current GET parameters with the language string
+     *
+     * @param string $language Language
+     * @return string Url
+     */
+    public function getUrl($language)
+    {
+        $langParams = [
+            '?' => ['lang' => $language]
+        ];
+        return Hash::merge($langParams, $this->request->params['pass']);
     }
 }

@@ -11,19 +11,16 @@
      <ul class="dropdown-menu">
          <?php foreach ($availableLanguages as $language): ?>
             <li>
-                <?= $this->Html->link(
-                    $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[$language] . '.png', [
-                        'style' => 'height: 17px; margin-right: 5px;'
-                    ]) . ' ' . $displayNames[$language],
-                    [
-                        '?' => [
-                            'lang' => $language
+                <?=
+                    $this->Html->link(
+                        $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[$language] . '.png', [
+                            'style' => 'height: 17px; margin-right: 5px;'
+                        ]) . ' ' . $displayNames[$language],
+                        $this->LanguageSwitcher->getUrl($language),
+                        [
+                            'escape' => false
                         ]
-                    ],
-                    [
-                        'escape' => false,
-
-                    ]);
+                    );
                 ?>
             </li>
         <?php endforeach; ?>
