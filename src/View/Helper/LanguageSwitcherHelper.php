@@ -36,7 +36,7 @@ class LanguageSwitcherHelper extends Helper
      */
     public function initialize(array $config = [])
     {
-        $this->configShallow($config);
+        $this->config($config);
     }
 
     /**

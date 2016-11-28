@@ -38,7 +38,7 @@ class LocalisationMiddleware
      */
     public function __construct($config = [])
     {
-        $this->configShallow($config);
+        $this->config($config);
         if (empty($this->config('Cookie.domain'))) {
             throw new RuntimeException('Missing config Cookie.domain for ' . get_class($this));
         }
