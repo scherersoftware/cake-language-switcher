@@ -61,9 +61,10 @@ class LanguageSwitcherHelper extends Helper
      */
     public function getUrl($language)
     {
-        $langParams = [
-            '?' => ['lang' => $language]
-        ];
-        return Hash::merge($langParams, $this->request->params['pass']);
+        $lang = ['lang' => $language];
+        $query = Hash::merge($lang, $this->request->query);
+        $urlArray = Hash::merge($this->request->params['pass'], ['?' => $query]);
+
+        return Router::url($urlArray);
     }
 }
