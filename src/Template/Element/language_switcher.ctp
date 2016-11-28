@@ -15,7 +15,7 @@ use Cake\I18n\I18n;
                     $flagImage = $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[$language] . '.png', [
                         'style' => 'height: 17px; margin-right: 5px;'
                     ]);
-                    $this->Html->link(
+                    echo $this->Html->link(
                         $flagImage . ' ' . $displayNames[$language],
                         $this->LanguageSwitcher->getUrl($language),
                         [
