@@ -112,7 +112,7 @@ class LocalisationMiddleware
      */
     private function getQueryLocale($request)
     {
-        if ($request->getQueryParams()) {
+        if (isset($request->getQueryParams()['lang'])) {
             return $request->getQueryParams()['lang'];
         }
     }
