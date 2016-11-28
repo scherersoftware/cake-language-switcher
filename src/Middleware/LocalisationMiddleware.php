@@ -56,11 +56,11 @@ class LocalisationMiddleware
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
         $cookieLocale = null;
-        if (isset($request->getCookieParams()[$this->getCookieName()])) {
-            $cookieLocale = $request->getCookieParams()[$this->getCookieName()];
+        if (isset($request->getCookieParams()[$this->__getCookieName()])) {
+            $cookieLocale = $request->getCookieParams()[$this->__getCookieName()];
         }
 
-        $queryLocale = $this->getQueryLocale($request);
+        $queryLocale = $this->__getQueryLocale($request);
         $session = $request->getAttribute('session');
         $user = $session->read('Auth.User');
 
@@ -73,17 +73,17 @@ class LocalisationMiddleware
                 $usersTable->save($user);
             }
 
-            if (isset($queryLocale) && in_array($queryLocale, $this->getAllowedLanguages())) {
+            if (isset($queryLocale) && in_array($queryLocale, $this->__getAllowedLanguages())) {
                 $user->{$this->config('field')} = $queryLocale;
                 $usersTable->save($user);
             }
 
-            $this->setCookieAndLocale($user->{$this->config('field')});
+            $this->__setCookieAndLocale($user->{$this->config('field')});
             return $next($request, $response);
         }
 
         if (isset($queryLocale)) {
-            $this->setCookieAndLocale($queryLocale);
+            $this->__setCookieAndLocale($queryLocale);
             return $next($request, $response);
         }
 
@@ -97,8 +97,8 @@ class LocalisationMiddleware
             return $next($request, $response);
         }
 
-        if (in_array($locale, $this->getAllowedLanguages()) || $this->getAllowedLanguages() === ['*']) {
-            $this->setCookieAndLocale($locale);
+        if (in_array($locale, $this->__getAllowedLanguages()) || $this->__getAllowedLanguages() === ['*']) {
+            $this->__setCookieAndLocale($locale);
         }
 
         return $next($request, $response);
@@ -109,7 +109,7 @@ class LocalisationMiddleware
      * @param  ServerRequestInterface $request  The request.
      * @return string       locale string
      */
-    private function getQueryLocale($request)
+    private function __getQueryLocale($request)
     {
         if (isset($request->getQueryParams()['lang'])) {
             return $request->getQueryParams()['lang'];
@@ -121,12 +121,12 @@ class LocalisationMiddleware
      *
      * @param string $locale locale
      */
-    private function setCookieAndLocale($locale)
+    private function __setCookieAndLocale($locale)
     {
-        $time = $this->getCookieExpireTime();
-        if (in_array($locale, $this->getAllowedLanguages())) {
+        $time = $this->__getCookieExpireTime();
+        if (in_array($locale, $this->__getAllowedLanguages())) {
             I18n::locale($locale);
-            setcookie($this->getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
+            setcookie($this->__getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
         }
     }
 
@@ -135,7 +135,7 @@ class LocalisationMiddleware
      *
      * @return array
      */
-    private function getAllowedLanguages()
+    private function __getAllowedLanguages()
     {
         return $this->config('availableLanguages');
     }
@@ -145,7 +145,7 @@ class LocalisationMiddleware
      *
      * @return string
      */
-    private function getCookieName()
+    private function __getCookieName()
     {
         return $this->config('Cookie.name');
     }
@@ -155,7 +155,7 @@ class LocalisationMiddleware
      *
      * @return int
      */
-    private function getCookieExpireTime()
+    private function __getCookieExpireTime()
     {
         $time = new Time($this->config('Cookie.expires'));
         return $time->toUnixString();
