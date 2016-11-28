@@ -1,6 +1,7 @@
 {
     "name": "scherersoftware/cake-language-switcher",
     "description": "LanguageSwitcher plugin for CakePHP",
+    "license": "MIT",
     "type": "cakephp-plugin",
     "require": {
         "php": ">=7.0.0",
