@@ -16,10 +16,33 @@ composer require scherersoftware/cake-language-switcher
 The next step is to load the plugin inside your bootstrap.php:
 
 ```
-bin/cake plugin load -b LanguageSwitcher
+bin/cake plugin load LanguageSwitcher
 ```
 
-Add the plugin to your AppView:
+Add the Middleware to your Application.php:
+
+```
+$middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware());
+```
+
+
+Optionally, you can pass an array of options to overwrite the default ones: 
+
+```
+$middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware([
+    'model' => 'Users',
+    'field' => 'language',
+    'Cookie' => [
+        'name' => 'ChoosenLanguage',
+        'expires' => '+1 year'
+    ],
+    'availableLanguages' => [
+        'en_US'
+    ]
+]));
+```
+
+Add the Helper to your AppView:
 
 ```
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher');

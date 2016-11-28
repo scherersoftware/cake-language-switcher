@@ -26,12 +26,6 @@ class LocalisationMiddleware
         ],
         'availableLanguages' => [
             'en_US'
-        ],
-        'displayNames' => [
-            'en_US' => 'English'
-        ],
-        'imageMapping' => [
-            'en_US' => 'United-States'
         ]
     ];
 
