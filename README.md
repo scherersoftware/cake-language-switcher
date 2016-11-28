@@ -26,7 +26,7 @@ $middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware());
 ```
 
 
-Optionally, you can pass an array of options to overwrite the default ones: 
+Optionally, you can pass an array of options to overwrite the default ones:
 
 ```
 $middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware([
@@ -34,7 +34,8 @@ $middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware([
     'field' => 'language',
     'Cookie' => [
         'name' => 'ChoosenLanguage',
-        'expires' => '+1 year'
+        'expires' => '+1 year',
+        'domain' => 'foo.bar'
     ],
     'availableLanguages' => [
         'en_US'
@@ -48,7 +49,7 @@ Add the Helper to your AppView:
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher');
 ```
 
-Optionally, you can pass an array of options: 
+Optionally, you can pass an array of options:
 
 ```
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
@@ -109,5 +110,5 @@ LanguageSwitcher => [
 - field: The field in the model
 - Cookie: Optionally you can change the cookie name and the expiration date of the cookie.
 - availableLanguages: Add language keys
-- displayNames: Should contain the same keys as availableLanguages. Map language key with its Display Name 
+- displayNames: Should contain the same keys as availableLanguages. Map language key with its Display Name
 - imageMapping: Should contain the same keys as availableLanguages. Map language key with its flag image name. (For all possible flag names open webroot/img/flags)

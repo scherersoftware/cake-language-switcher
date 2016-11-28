@@ -11,6 +11,7 @@ use Cake\ORM\TableRegistry;
 use Locale;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use \RuntimeException;
 
 class LocalisationMiddleware
 {
@@ -22,7 +23,8 @@ class LocalisationMiddleware
         'field' => 'language',
         'Cookie' => [
             'name' => 'ChoosenLanguage',
-            'expires' => '+1 year'
+            'expires' => '+1 year',
+            'domain' => ''
         ],
         'availableLanguages' => [
             'en_US'
@@ -37,6 +39,9 @@ class LocalisationMiddleware
     public function __construct($config = [])
     {
         $this->configShallow($config);
+        if (empty($this->config('Cookie.domain'))) {
+            throw new RuntimeException('Missing config Cookie.domain for ' . get_class($this));
+        }
     }
 
     /**
@@ -121,7 +126,7 @@ class LocalisationMiddleware
         $time = $this->getCookieExpireTime();
         if (in_array($locale, $this->getAllowedLanguages())) {
             I18n::locale($locale);
-            setcookie($this->getCookieName(), $locale, $time, '/', Environment::read('MAIN_DOMAIN'));
+            setcookie($this->getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
         }
     }
 
@@ -142,7 +147,7 @@ class LocalisationMiddleware
      */
     private function getCookieName()
     {
-        return $this->config('Cookie')['name'];
+        return $this->config('Cookie.name');
     }
 
     /**
@@ -152,7 +157,7 @@ class LocalisationMiddleware
      */
     private function getCookieExpireTime()
     {
-        $time = new Time($this->config('Cookie')['expires']);
+        $time = new Time($this->config('Cookie.expires'));
         return $time->toUnixString();
     }
 }
