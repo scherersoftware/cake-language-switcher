@@ -19,7 +19,7 @@ class LanguageSwitcherHelper extends Helper
 
     protected $_defaultConfig = [
         'availableLanguages' => [
-            'en_US'
+            'en_US' => 'en_US'
         ],
         'displayNames' => [
             'en_US' => 'English'
@@ -28,16 +28,6 @@ class LanguageSwitcherHelper extends Helper
             'en_US' => 'United-States'
         ]
     ];
-
-    /**
-     * Constructor.
-     *
-     * @param array $config config
-     */
-    public function initialize(array $config = [])
-    {
-        $this->config($config);
-    }
 
     /**
      * Renders language switcher dropdown

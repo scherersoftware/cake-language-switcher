@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use \RuntimeException;
 
-class LocalisationMiddleware
+class LanguageSwitcherMiddleware
 {
 
     use InstanceConfigTrait;
@@ -27,7 +27,7 @@ class LocalisationMiddleware
             'domain' => ''
         ],
         'availableLanguages' => [
-            'en_US'
+            'en_US' => 'en_US'
         ]
     ];
 

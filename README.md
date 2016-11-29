@@ -29,7 +29,7 @@ $middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware());
 Optionally, you can pass an array of options to overwrite the default ones:
 
 ```
-$middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware([
+$middleware->push(new \LanguageSwitcher\Middleware\LanguageSwitcherMiddleware([
     'model' => 'Users',
     'field' => 'language',
     'Cookie' => [
@@ -38,7 +38,7 @@ $middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware([
         'domain' => 'foo.bar'
     ],
     'availableLanguages' => [
-        'en_US'
+        'en_US' => en_US'
     ]
 ]));
 ```
@@ -54,8 +54,8 @@ Optionally, you can pass an array of options:
 ```
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
     'availableLanguages' => [
-        'en_US',
-        'de_DE'
+        'en_US' => 'en_US',
+        'de_DE' => 'de_DE
     ],
     'displayNames' => [
         'en_US' => 'English',
