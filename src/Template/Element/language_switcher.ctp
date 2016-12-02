@@ -1,7 +1,7 @@
 <?php
 use Cake\I18n\I18n;
 ?>
-<li class="dropdown">
+<li class="dropdown language-switcher">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <?= $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[I18n::locale()] . '.png', [
             'style' => 'height: 17px; margin-right: 5px;'
