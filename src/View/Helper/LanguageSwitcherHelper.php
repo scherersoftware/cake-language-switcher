@@ -52,7 +52,7 @@ class LanguageSwitcherHelper extends Helper
     public function getUrl($language)
     {
         $lang = ['lang' => $language];
-        $query = Hash::merge($lang, $this->request->query);
+        $query = Hash::merge($this->request->query, $lang);
         $urlArray = Hash::merge($this->request->params['pass'], ['?' => $query]);
 
         return Router::url($urlArray);
