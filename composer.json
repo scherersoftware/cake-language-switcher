@@ -5,11 +5,11 @@
     "type": "cakephp-plugin",
     "require": {
         "php": ">=7.0.0",
-        "cakephp/cakephp": ">=3.3.2 < 4.0.0",
-        "cakephp/cakephp-codesniffer": "2.1.*"
+        "cakephp/cakephp": ">=3.3.2 < 4.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "cakephp/cakephp-codesniffer": "2.1.*"
     },
     "autoload": {
         "psr-4": {
