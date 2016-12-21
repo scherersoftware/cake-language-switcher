@@ -79,16 +79,19 @@ class LanguageSwitcherMiddleware
             }
 
             $this->__setCookieAndLocale($user->{$this->config('field')});
+
             return $next($request, $response);
         }
 
         if (isset($queryLocale)) {
             $this->__setCookieAndLocale($queryLocale);
+
             return $next($request, $response);
         }
 
         if (!isset($queryLocale) && isset($cookieLocale)) {
             I18n::locale($cookieLocale);
+
             return $next($request, $response);
         }
 
@@ -158,6 +161,7 @@ class LanguageSwitcherMiddleware
     private function __getCookieExpireTime()
     {
         $time = new Time($this->config('Cookie.expires'));
+
         return $time->toUnixString();
     }
 }
