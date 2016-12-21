@@ -1,6 +1,6 @@
 ![CakePHP 3 Language Switcher Plugin](https://raw.githubusercontent.com/scherersoftware/cake-language-switcher/master/language-switcher.png)
 
-[![Build Status](https://travis-ci.org/scherersoftware/cakephp-app-template.svg?branch=master)](https://travis-ci.org/scherersoftware/cake-language-switcher)
+[![Build Status](https://travis-ci.org/scherersoftware/cake-language-switcher.svg?branch=master)](https://travis-ci.org/scherersoftware/cake-language-switcher)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 
 ## Installation
