@@ -123,13 +123,17 @@ class LanguageSwitcherMiddleware
      * Set the cookie and the locale
      *
      * @param string $locale locale
+     * @return void
      */
     private function __setCookieAndLocale($locale)
     {
-        $time = $this->__getCookieExpireTime();
-        if (in_array($locale, $this->__getAllowedLanguages())) {
-            I18n::locale($locale);
-            setcookie($this->__getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
+        // @FIXME Should be refactored when cake 3.4 was released
+        if (PHP_SAPI !== 'cli') {
+            $time = $this->__getCookieExpireTime();
+            if (in_array($locale, $this->__getAllowedLanguages())) {
+                I18n::locale($locale);
+                setcookie($this->__getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
+            }
         }
     }
 
