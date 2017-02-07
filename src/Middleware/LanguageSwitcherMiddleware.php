@@ -74,8 +74,10 @@ class LanguageSwitcherMiddleware
             }
 
             if (isset($queryLocale) && in_array($queryLocale, $this->__getAllowedLanguages())) {
-                $user->{$this->config('field')} = $queryLocale;
-                $usersTable->save($user);
+                if ($user->{$this->config('field')} !== $queryLocale) {
+                    $user->{$this->config('field')} = $queryLocale;
+                    $usersTable->save($user);
+                }
             }
 
             $this->__setCookieAndLocale($user->{$this->config('field')});
