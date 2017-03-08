@@ -22,7 +22,7 @@ bin/cake plugin load LanguageSwitcher
 Add the Middleware to your Application.php:
 
 ```
-$middleware->push(new \LanguageSwitcher\Middleware\LocalisationMiddleware());
+$middleware->push(new \LanguageSwitcher\Middleware\LanguageSwitcherMiddleware());
 ```
 
 
@@ -38,7 +38,7 @@ $middleware->push(new \LanguageSwitcher\Middleware\LanguageSwitcherMiddleware([
         'domain' => 'foo.bar'
     ],
     'availableLanguages' => [
-        'en_US' => en_US'
+        'en_US' => 'en_US'
     ]
 ]));
 ```
@@ -55,14 +55,14 @@ Optionally, you can pass an array of options:
 $this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
     'availableLanguages' => [
         'en_US' => 'en_US',
-        'de_DE' => 'de_DE
+        'de_DE' => 'de_DE'
     ],
     'displayNames' => [
         'en_US' => 'English',
         'de_DE' => 'Deutsch'
     ],
     'imageMapping' => [
-        'en_US' => 'United-States'
+        'en_US' => 'United-States',
         'de_DE' => 'Germany'
     ]
 ]);
@@ -87,7 +87,7 @@ Add the css file located under webroot/css to your layout file!
 Inside your app.php add the following to change configs of the plugin:
 
 ```
-LanguageSwitcher => [
+'LanguageSwitcher' => [
     'model' => 'Users',
     'field' => 'language',
     'Cookie' => [
