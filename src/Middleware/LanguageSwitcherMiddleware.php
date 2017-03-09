@@ -26,9 +26,8 @@ class LanguageSwitcherMiddleware
             'expires' => '+1 year',
             'domain' => ''
         ],
-        'availableLanguages' => [
-            'en_US' => 'en_US'
-        ]
+        'availableLanguages' => [],
+        'mappingFunction' => null
     ];
 
     /**
@@ -67,6 +66,13 @@ class LanguageSwitcherMiddleware
         if (isset($user)) {
             $usersTable = TableRegistry::get($this->config('model'));
             $user = $usersTable->get($user['id']);
+
+            $mappingFunction = $this->config('mappingFunction');
+            if (isset($mappingFunction)
+                && is_callable($mappingFunction)
+            ) {
+                $mappingFunction($user, $request, $response);
+            }
 
             if (!isset($user->{$this->config('field')})) {
                 $user->{$this->config('field')} = $cookieLocale;
