@@ -18,15 +18,9 @@ class LanguageSwitcherHelper extends Helper
     use InstanceConfigTrait;
 
     protected $_defaultConfig = [
-        'availableLanguages' => [
-            'en_US' => 'en_US'
-        ],
-        'displayNames' => [
-            'en_US' => 'English'
-        ],
-        'imageMapping' => [
-            'en_US' => 'United-States'
-        ]
+        'availableLanguages' => [],
+        'displayNames' => [],
+        'imageMapping' => []
     ];
 
     /**

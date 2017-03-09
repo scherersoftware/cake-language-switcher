@@ -26,9 +26,7 @@ class LanguageSwitcherMiddleware
             'expires' => '+1 year',
             'domain' => ''
         ],
-        'availableLanguages' => [
-            'en_US' => 'en_US'
-        ],
+        'availableLanguages' => [],
         'mappingFunction' => null
     ];
 
