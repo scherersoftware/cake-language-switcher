@@ -29,7 +29,7 @@ class LanguageSwitcherMiddleware
         'availableLanguages' => [
             'en_US' => 'en_US'
         ],
-        'mappingFunction' => null
+        'beforeSaveCallback' => null
     ];
 
     /**
@@ -69,11 +69,11 @@ class LanguageSwitcherMiddleware
             $usersTable = TableRegistry::get($this->config('model'));
             $user = $usersTable->get($user['id']);
 
-            $mappingFunction = $this->config('mappingFunction');
-            if (isset($mappingFunction)
-                && is_callable($mappingFunction)
+            $beforeSaveCallback = $this->config('beforeSaveCallback');
+            if (isset($beforeSaveCallback)
+                && is_callable($beforeSaveCallback)
             ) {
-                $mappingFunction($user, $request, $response);
+                $beforeSaveCallback($user, $request, $response);
             }
 
             if (!isset($user->{$this->config('field')})) {

@@ -103,7 +103,7 @@ LanguageSwitcher => [
     'imageMapping' => [
         'en_US' => 'United-States'
     ],
-    'mappingFunction' => function ($user, $request, $response) {
+    'beforeSaveCallback' => function ($user, $request, $response) {
         $language = 'en_EN';
         $user->language = $language;
     }
@@ -116,4 +116,4 @@ LanguageSwitcher => [
 - availableLanguages: Add language keys
 - displayNames: Should contain the same keys as availableLanguages. Map language key with its Display Name
 - imageMapping: Should contain the same keys as availableLanguages. Map language key with its flag image name. (For all possible flag names open webroot/img/flags)
-- mappingFunction: Optionally you can override the user entity to set e.g. the language field with a special value
+- beforeSaveCallback: Optionally you can override the user entity to set e.g. the language field with a special value
