@@ -26,7 +26,8 @@ class LanguageSwitcherHelper extends Helper
         ],
         'imageMapping' => [
             'en_US' => 'United-States'
-        ]
+        ],
+        'renderToggleButtonDisplayName' => true
     ];
 
     /**
@@ -39,7 +40,8 @@ class LanguageSwitcherHelper extends Helper
         return $this->_View->element('LanguageSwitcher.language_switcher', [
             'availableLanguages' => $this->config('availableLanguages'),
             'displayNames' => $this->config('displayNames'),
-            'imageMapping' => $this->config('imageMapping')
+            'imageMapping' => $this->config('imageMapping'),
+            'renderToggleButtonDisplayName' => $this->config('renderToggleButtonDisplayName')
         ]);
     }
 
