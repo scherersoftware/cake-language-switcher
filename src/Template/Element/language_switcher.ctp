@@ -1,12 +1,18 @@
 <?php
 use Cake\I18n\I18n;
+
+$style = 'height: 17px;';
+if ($renderToggleButtonDisplayName) {
+    $style .= 'margin-right: 5px;';
+}
+$options['style'] = $style;
 ?>
 <li class="dropdown language-switcher">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <?= $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[I18n::locale()] . '.png', [
-            'style' => 'height: 17px; margin-right: 5px;'
-        ]); ?>
-        <?= $displayNames[I18n::locale()]; ?>
+        <?= $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[I18n::locale()] . '.png', $options); ?>
+        <?php if ($renderToggleButtonDisplayName): ?>
+            <?= $displayNames[I18n::locale()]; ?>
+        <?php endif; ?>
     </a>
     <ul class="dropdown-menu">
         <?php foreach ($availableLanguages as $language): ?>
