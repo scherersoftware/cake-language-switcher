@@ -65,7 +65,8 @@ $this->loadHelper('LanguageSwitcher.LanguageSwitcher', [
         'en_US' => 'United-States',
         'de_DE' => 'Germany'
     ],
-    'renderToggleButtonDisplayName' => true
+    'renderToggleButtonDisplayName' => true,
+    'element' => 'LanguageSwitcher.language_switcher'
 ]);
 ```
 
@@ -120,3 +121,4 @@ Inside your app.php add the following to change configs of the plugin:
 - imageMapping: Should contain the same keys as availableLanguages. Map language key with its flag image name. (For all possible flag names open webroot/img/flags)
 - beforeSaveCallback: Optionally you can override the user entity to set e.g. the language field with a special value
 - renderToggleButtonDisplayName: Optionally you can hide the language name in the dropdown toggle button
+- element: Optionally you can override the element used for rendering the language switcher with your own.
