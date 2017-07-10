@@ -29,7 +29,8 @@ class LanguageSwitcherMiddleware
         'availableLanguages' => [
             'en_US' => 'en_US'
         ],
-        'beforeSaveCallback' => null
+        'beforeSaveCallback' => null,
+        'additionalConfigFiles' => []
     ];
 
     /**
@@ -90,29 +91,45 @@ class LanguageSwitcherMiddleware
 
             $this->__setCookieAndLocale($user->{$this->config('field')});
 
-            return $next($request, $response);
+            return $this->__next($request, $response, $next);
         }
 
         if (isset($queryLocale)) {
             $this->__setCookieAndLocale($queryLocale);
 
-            return $next($request, $response);
+            return $this->__next($request, $response, $next);
         }
 
         if (!isset($queryLocale) && isset($cookieLocale)) {
             I18n::locale($cookieLocale);
 
-            return $next($request, $response);
+            return $this->__next($request, $response, $next);
         }
 
         $locale = Locale::acceptFromHttp($request->getHeaderLine('Accept-Language'));
         if (!$locale) {
-            return $next($request, $response);
+            return $this->__next($request, $response, $next);
         }
 
         if (in_array($locale, $this->__getAllowedLanguages()) || $this->__getAllowedLanguages() === ['*']) {
             $this->__setCookieAndLocale($locale);
         }
+
+        return $this->__next($request, $response, $next);
+    }
+
+    /**
+     * Calls the next middleware.
+     *
+     * @param ServerRequestInterface $request  The request.
+     * @param ResponseInterface $response The response.
+     * @param callable $next The next middleware to call.
+     *
+     * @return \Psr\Http\Message\ResponseInterface A response.
+     */
+    private function __next(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        $this->__loadConfigFiles();
 
         return $next($request, $response);
     }
@@ -144,6 +161,19 @@ class LanguageSwitcherMiddleware
                 I18n::locale($locale);
                 setcookie($this->__getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
             }
+        }
+    }
+
+    /**
+     * Loads additional config files that require the language to be set correctly.
+     *
+     * @return void
+     */
+    private function __loadConfigFiles()
+    {
+        $additionalConfigs = $this->config('additionalConfigFiles');
+        foreach ($additionalConfigs as $additionalConfig) {
+            Configure::load($additionalConfig);
         }
     }
 
