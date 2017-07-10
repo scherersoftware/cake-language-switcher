@@ -171,7 +171,7 @@ class LanguageSwitcherMiddleware
      */
     private function __loadConfigFiles()
     {
-        $additionalConfigs = $this->getConfig('additionalConfigFiles');
+        $additionalConfigs = $this->config('additionalConfigFiles');
         foreach ($additionalConfigs as $additionalConfig) {
             Configure::load($additionalConfig);
         }
