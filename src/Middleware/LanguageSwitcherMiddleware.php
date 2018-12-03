@@ -113,6 +113,8 @@ class LanguageSwitcherMiddleware
 
         if (in_array($locale, $this->__getAllowedLanguages()) || $this->__getAllowedLanguages() === ['*']) {
             $this->__setCookieAndLocale($locale);
+        } else {
+            $this->__setCookieAndLocale(Configure::read('App.defaultLocale'));
         }
 
         return $this->__next($request, $response, $next);
