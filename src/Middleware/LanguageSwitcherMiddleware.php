@@ -11,7 +11,8 @@ use Cake\ORM\TableRegistry;
 use Locale;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use \RuntimeException;
+use RuntimeException;
+use Throwable;
 
 class LanguageSwitcherMiddleware
 {
@@ -68,7 +69,13 @@ class LanguageSwitcherMiddleware
 
         if (isset($user)) {
             $usersTable = TableRegistry::get($this->config('model'));
-            $user = $usersTable->get($user['id']);
+
+            try {
+                $user = $usersTable->get($user['id']);
+            } catch (Throwable $t) {
+                // Return early if the user is not found.
+                return $this->__next($request, $response, $next);
+            }
 
             $beforeSaveCallback = $this->config('beforeSaveCallback');
             if (isset($beforeSaveCallback)
