@@ -117,11 +117,11 @@ class LanguageSwitcherMiddleware
         if (!$locale) {
             return $this->__next($request, $response, $next);
         }
-
-        if (in_array($locale, $this->__getAllowedLanguages()) || $this->__getAllowedLanguages() === ['*']) {
+        if ($this->__getAllowedLanguages() !== ['*']) {
+            $locale = Locale::lookup($this->__getAllowedLanguages(), $locale, true, Configure::read('App.defaultLocale'));
+        }
+        if ($locale || $this->__getAllowedLanguages() === ['*']) {
             $this->__setCookieAndLocale($locale);
-        } else {
-            $this->__setCookieAndLocale(Configure::read('App.defaultLocale'));
         }
 
         return $this->__next($request, $response, $next);
