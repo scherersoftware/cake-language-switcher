@@ -6,7 +6,6 @@ use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\I18n\I18n;
 use Cake\I18n\Time;
-use Cake\Network\Session;
 use Cake\ORM\TableRegistry;
 use Locale;
 use Psr\Http\Message\ResponseInterface;
@@ -41,8 +40,8 @@ class LanguageSwitcherMiddleware
      */
     public function __construct($config = [])
     {
-        $this->config($config);
-        if (empty($this->config('Cookie.domain'))) {
+        $this->setConfig($config);
+        if (empty($this->getConfig('Cookie.domain'))) {
             throw new RuntimeException('Missing config Cookie.domain for ' . get_class($this));
         }
     }
@@ -68,7 +67,7 @@ class LanguageSwitcherMiddleware
         $user = $session->read('Auth.User');
 
         if (isset($user)) {
-            $usersTable = TableRegistry::get($this->config('model'));
+            $usersTable = TableRegistry::getTableLocator()->get($this->getConfig('model'));
 
             try {
                 $user = $usersTable->get($user['id']);
@@ -77,26 +76,26 @@ class LanguageSwitcherMiddleware
                 return $this->__next($request, $response, $next);
             }
 
-            $beforeSaveCallback = $this->config('beforeSaveCallback');
+            $beforeSaveCallback = $this->getConfig('beforeSaveCallback');
             if (isset($beforeSaveCallback)
                 && is_callable($beforeSaveCallback)
             ) {
                 $beforeSaveCallback($user, $request, $response);
             }
 
-            if (!isset($user->{$this->config('field')})) {
-                $user->{$this->config('field')} = $cookieLocale;
+            if (!isset($user->{$this->getConfig('field')})) {
+                $user->{$this->getConfig('field')} = $cookieLocale;
                 $usersTable->save($user);
             }
 
             if (isset($queryLocale) && in_array($queryLocale, $this->__getAllowedLanguages())) {
-                if ($user->{$this->config('field')} !== $queryLocale) {
-                    $user->{$this->config('field')} = $queryLocale;
+                if ($user->{$this->getConfig('field')} !== $queryLocale) {
+                    $user->{$this->getConfig('field')} = $queryLocale;
                     $usersTable->save($user);
                 }
             }
 
-            $this->__setCookieAndLocale($user->{$this->config('field')});
+            $this->__setCookieAndLocale($user->{$this->getConfig('field')});
 
             return $this->__next($request, $response, $next);
         }
@@ -108,7 +107,7 @@ class LanguageSwitcherMiddleware
         }
 
         if (!isset($queryLocale) && isset($cookieLocale)) {
-            I18n::locale($cookieLocale);
+            I18n::setLocale($cookieLocale);
 
             return $this->__next($request, $response, $next);
         }
@@ -169,8 +168,8 @@ class LanguageSwitcherMiddleware
         // @FIXME Should be refactored when cake 3.4 was released
         if (PHP_SAPI !== 'cli') {
             $time = $this->__getCookieExpireTime();
-            I18n::locale($locale);
-            setcookie($this->__getCookieName(), $locale, $time, '/', $this->config('Cookie.domain'));
+            I18n::setLocale($locale);
+            setcookie($this->__getCookieName(), $locale, $time, '/', $this->getConfig('Cookie.domain'));
         }
     }
 
@@ -181,7 +180,7 @@ class LanguageSwitcherMiddleware
      */
     private function __loadConfigFiles()
     {
-        $additionalConfigs = $this->config('additionalConfigFiles');
+        $additionalConfigs = $this->getConfig('additionalConfigFiles');
         foreach ($additionalConfigs as $additionalConfig) {
             Configure::load($additionalConfig);
         }
@@ -194,7 +193,7 @@ class LanguageSwitcherMiddleware
      */
     private function __getAllowedLanguages()
     {
-        return $this->config('availableLanguages');
+        return $this->getConfig('availableLanguages');
     }
 
     /**
@@ -204,7 +203,7 @@ class LanguageSwitcherMiddleware
      */
     private function __getCookieName()
     {
-        return $this->config('Cookie.name');
+        return $this->getConfig('Cookie.name');
     }
 
     /**
@@ -214,7 +213,7 @@ class LanguageSwitcherMiddleware
      */
     private function __getCookieExpireTime()
     {
-        $time = new Time($this->config('Cookie.expires'));
+        $time = new Time($this->getConfig('Cookie.expires'));
 
         return $time->toUnixString();
     }
