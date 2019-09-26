@@ -9,9 +9,9 @@ $options['style'] = $style;
 ?>
 <li class="dropdown language-switcher">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <?= $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[I18n::locale()] . '.png', $options); ?>
+        <?= $this->Html->image('LanguageSwitcher.flags/' . $imageMapping[I18n::getLocale()] . '.png', $options); ?>
         <?php if ($renderToggleButtonDisplayName): ?>
-            <?= $displayNames[I18n::locale()]; ?>
+            <?= $displayNames[I18n::getLocale()]; ?>
         <?php endif; ?>
     </a>
     <ul class="dropdown-menu">
