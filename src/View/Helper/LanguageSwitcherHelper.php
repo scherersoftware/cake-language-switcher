@@ -1,13 +1,10 @@
 <?php
 namespace LanguageSwitcher\View\Helper;
 
-use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use Cake\Utility\Text;
 use Cake\View\Helper;
-use Cake\View\View;
 
 /**
  * LanguageSwitcher helper
@@ -34,15 +31,15 @@ class LanguageSwitcherHelper extends Helper
     /**
      * Renders language switcher dropdown
      *
-     * @return element
+     * @return string
      */
     public function renderLanguageSwitcher()
     {
-        return $this->_View->element($this->config('element'), [
-            'availableLanguages' => $this->config('availableLanguages'),
-            'displayNames' => $this->config('displayNames'),
-            'imageMapping' => $this->config('imageMapping'),
-            'renderToggleButtonDisplayName' => $this->config('renderToggleButtonDisplayName')
+        return $this->_View->element($this->getConfig('element'), [
+            'availableLanguages' => $this->getConfig('availableLanguages'),
+            'displayNames' => $this->getConfig('displayNames'),
+            'imageMapping' => $this->getConfig('imageMapping'),
+            'renderToggleButtonDisplayName' => $this->getConfig('renderToggleButtonDisplayName')
         ]);
     }
 
@@ -55,8 +52,8 @@ class LanguageSwitcherHelper extends Helper
     public function getUrl($language)
     {
         $lang = ['lang' => $language];
-        $query = Hash::merge($this->request->query, $lang);
-        $urlArray = Hash::merge($this->request->params['pass'], ['?' => $query]);
+        $query = Hash::merge($this->getView()->getRequest()->getQueryParams(), $lang);
+        $urlArray = Hash::merge($this->getView()->getRequest()->getParam('pass'), ['?' => $query]);
 
         return Router::url($urlArray);
     }
