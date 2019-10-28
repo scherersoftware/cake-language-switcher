@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -16,7 +18,8 @@ class LanguageMigration extends AbstractMigration
             'model' => 'Users',
             'field' => 'language'
         ], Configure::read('LanguageSwitcher'));
-        $this->_model = TableRegistry::get($this->_config['model']);
+
+        $this->_model = TableRegistry::getTableLocator()->get($this->_config['model']);
     }
 
     public function up()

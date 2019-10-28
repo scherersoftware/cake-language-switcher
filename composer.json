@@ -4,25 +4,27 @@
     "license": "MIT",
     "type": "cakephp-plugin",
     "require": {
-        "php": ">=7.0.0",
-        "cakephp/cakephp": ">=3.6"
+        "php": ">=7.1.0",
+        "cakephp/cakephp": ">=3.8"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "cakephp/cakephp-codesniffer": "dev-master"
+        "phpstan/phpstan": "^0.11",
+        "cakephp/cakephp-codesniffer": "^3.1",
+        "scherersoftware/coding-standard": "^3.1"
     },
     "autoload": {
         "psr-4": {
             "LanguageSwitcher\\": "src"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "LanguageSwitcher\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
-        }
-    },
     "scripts": {
-        "cs-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src"
+        "check": [
+            "@php-check",
+            "@php-check-strict",
+            "@phpstan"
+        ],
+        "php-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
+        "php-check-strict": "vendor/bin/phpcs -p --standard=vendor/scherersoftware/coding-standard/scherersoftware ./src",
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon -l 7 ./src"
     }
 }

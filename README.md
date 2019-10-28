@@ -13,7 +13,7 @@ The recommended way to install composer packages is:
 composer require scherersoftware/cake-language-switcher
 ```
 
-The next step is to load the plugin inside your bootstrap.php:
+The next step is to load the plugin inside your Application.php:
 
 ```
 bin/cake plugin load LanguageSwitcher
