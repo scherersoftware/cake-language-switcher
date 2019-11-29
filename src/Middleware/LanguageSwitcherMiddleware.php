@@ -15,7 +15,6 @@ use Throwable;
 
 class LanguageSwitcherMiddleware
 {
-
     use InstanceConfigTrait;
 
     /**
@@ -47,7 +46,7 @@ class LanguageSwitcherMiddleware
     {
         $this->setConfig($config);
         if (empty($this->getConfig('Cookie.domain'))) {
-            throw new RuntimeException('Missing config Cookie.domain for ' . get_class($this));
+            throw new RuntimeException('Missing config Cookie.domain for ' . LanguageSwitcherMiddleware::class);
         }
     }
 
@@ -60,8 +59,11 @@ class LanguageSwitcherMiddleware
      *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
-    {
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ): ResponseInterface {
         $cookieLocale = null;
         if (isset($request->getCookieParams()[$this->__getCookieName()])) {
             $cookieLocale = $request->getCookieParams()[$this->__getCookieName()];
@@ -82,7 +84,8 @@ class LanguageSwitcherMiddleware
             }
 
             $beforeSaveCallback = $this->getConfig('beforeSaveCallback');
-            if (isset($beforeSaveCallback)
+            if (
+                isset($beforeSaveCallback)
                 && is_callable($beforeSaveCallback)
             ) {
                 $beforeSaveCallback($user, $request, $response);
@@ -93,7 +96,7 @@ class LanguageSwitcherMiddleware
                 $usersTable->save($user);
             }
 
-            if (isset($queryLocale) && in_array($queryLocale, $this->__getAllowedLanguages())) {
+            if (in_array($queryLocale, $this->__getAllowedLanguages())) {
                 if ($user->{$this->getConfig('field')} !== $queryLocale) {
                     $user->{$this->getConfig('field')} = $queryLocale;
                     $usersTable->save($user);
@@ -122,7 +125,12 @@ class LanguageSwitcherMiddleware
             return $this->__next($request, $response, $next);
         }
         if ($this->__getAllowedLanguages() !== ['*']) {
-            $locale = Locale::lookup($this->__getAllowedLanguages(), $locale, true, Configure::read('App.defaultLocale'));
+            $locale = Locale::lookup(
+                $this->__getAllowedLanguages(),
+                $locale,
+                true,
+                Configure::read('App.defaultLocale')
+            );
             if ($locale === '') {
                 $locale = Configure::read('App.defaultLocale');
             }
@@ -143,8 +151,11 @@ class LanguageSwitcherMiddleware
      *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
-    private function __next(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
-    {
+    private function __next(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ): ResponseInterface {
         $this->__loadConfigFiles();
 
         return $next($request, $response);
@@ -152,14 +163,16 @@ class LanguageSwitcherMiddleware
 
     /**
      * Get Query Locale
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  The request.
-     * @return string       locale string
+     * @param  \Psr\Http\Message\ServerRequestInterface $request The request.
+     * @return string|null locale string
      */
-    private function __getQueryLocale(ServerRequestInterface $request): string
+    private function __getQueryLocale(ServerRequestInterface $request): ?string
     {
         if (isset($request->getQueryParams()['lang'])) {
             return $request->getQueryParams()['lang'];
         }
+
+        return null;
     }
 
     /**
