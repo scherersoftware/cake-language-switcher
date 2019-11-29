@@ -1,7 +1,7 @@
 <?php
+declare(strict_types = 1);
 namespace LanguageSwitcher\Middleware;
 
-use App\Lib\Environment;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\I18n\I18n;
@@ -15,22 +15,26 @@ use Throwable;
 
 class LanguageSwitcherMiddleware
 {
-
     use InstanceConfigTrait;
 
+    /**
+     * Default config for the middleware.
+     *
+     * @var array
+     */
     protected $_defaultConfig = [
         'model' => 'Users',
         'field' => 'language',
         'Cookie' => [
             'name' => 'ChoosenLanguage',
             'expires' => '+1 year',
-            'domain' => ''
+            'domain' => '',
         ],
         'availableLanguages' => [
-            'en_US' => 'en_US'
+            'en_US' => 'en_US',
         ],
         'beforeSaveCallback' => null,
-        'additionalConfigFiles' => []
+        'additionalConfigFiles' => [],
     ];
 
     /**
@@ -38,25 +42,28 @@ class LanguageSwitcherMiddleware
      *
      * @param array $config config
      */
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
         $this->setConfig($config);
         if (empty($this->getConfig('Cookie.domain'))) {
-            throw new RuntimeException('Missing config Cookie.domain for ' . get_class($this));
+            throw new RuntimeException('Missing config Cookie.domain for ' . LanguageSwitcherMiddleware::class);
         }
     }
 
     /**
      * Sets the locale to user locale or browser locale
      *
-     * @param ServerRequestInterface $request  The request.
-     * @param ResponseInterface $response The response.
+     * @param \Psr\Http\Message\ServerRequestInterface $request  The request.
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
      * @param callable $next The next middleware to call.
      *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
-    {
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ): ResponseInterface {
         $cookieLocale = null;
         if (isset($request->getCookieParams()[$this->__getCookieName()])) {
             $cookieLocale = $request->getCookieParams()[$this->__getCookieName()];
@@ -77,7 +84,8 @@ class LanguageSwitcherMiddleware
             }
 
             $beforeSaveCallback = $this->getConfig('beforeSaveCallback');
-            if (isset($beforeSaveCallback)
+            if (
+                isset($beforeSaveCallback)
                 && is_callable($beforeSaveCallback)
             ) {
                 $beforeSaveCallback($user, $request, $response);
@@ -88,7 +96,7 @@ class LanguageSwitcherMiddleware
                 $usersTable->save($user);
             }
 
-            if (isset($queryLocale) && in_array($queryLocale, $this->__getAllowedLanguages())) {
+            if (in_array($queryLocale, $this->__getAllowedLanguages())) {
                 if ($user->{$this->getConfig('field')} !== $queryLocale) {
                     $user->{$this->getConfig('field')} = $queryLocale;
                     $usersTable->save($user);
@@ -117,7 +125,12 @@ class LanguageSwitcherMiddleware
             return $this->__next($request, $response, $next);
         }
         if ($this->__getAllowedLanguages() !== ['*']) {
-            $locale = Locale::lookup($this->__getAllowedLanguages(), $locale, true, Configure::read('App.defaultLocale'));
+            $locale = Locale::lookup(
+                $this->__getAllowedLanguages(),
+                $locale,
+                true,
+                Configure::read('App.defaultLocale')
+            );
             if ($locale === '') {
                 $locale = Configure::read('App.defaultLocale');
             }
@@ -132,14 +145,17 @@ class LanguageSwitcherMiddleware
     /**
      * Calls the next middleware.
      *
-     * @param ServerRequestInterface $request  The request.
-     * @param ResponseInterface $response The response.
+     * @param \Psr\Http\Message\ServerRequestInterface $request  The request.
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
      * @param callable $next The next middleware to call.
      *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
-    private function __next(ServerRequestInterface $request, ResponseInterface $response, $next)
-    {
+    private function __next(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ): ResponseInterface {
         $this->__loadConfigFiles();
 
         return $next($request, $response);
@@ -147,14 +163,16 @@ class LanguageSwitcherMiddleware
 
     /**
      * Get Query Locale
-     * @param  ServerRequestInterface $request  The request.
-     * @return string       locale string
+     * @param  \Psr\Http\Message\ServerRequestInterface $request The request.
+     * @return string|null locale string
      */
-    private function __getQueryLocale($request)
+    private function __getQueryLocale(ServerRequestInterface $request): ?string
     {
         if (isset($request->getQueryParams()['lang'])) {
             return $request->getQueryParams()['lang'];
         }
+
+        return null;
     }
 
     /**
@@ -163,7 +181,7 @@ class LanguageSwitcherMiddleware
      * @param string $locale locale
      * @return void
      */
-    private function __setCookieAndLocale($locale)
+    private function __setCookieAndLocale(string $locale): void
     {
         // @FIXME Should be refactored when cake 3.4 was released
         if (PHP_SAPI !== 'cli') {
@@ -178,7 +196,7 @@ class LanguageSwitcherMiddleware
      *
      * @return void
      */
-    private function __loadConfigFiles()
+    private function __loadConfigFiles(): void
     {
         $additionalConfigs = $this->getConfig('additionalConfigFiles');
         foreach ($additionalConfigs as $additionalConfig) {
@@ -191,7 +209,7 @@ class LanguageSwitcherMiddleware
      *
      * @return array
      */
-    private function __getAllowedLanguages()
+    private function __getAllowedLanguages(): array
     {
         return $this->getConfig('availableLanguages');
     }
@@ -201,7 +219,7 @@ class LanguageSwitcherMiddleware
      *
      * @return string
      */
-    private function __getCookieName()
+    private function __getCookieName(): string
     {
         return $this->getConfig('Cookie.name');
     }
@@ -211,7 +229,7 @@ class LanguageSwitcherMiddleware
      *
      * @return int
      */
-    private function __getCookieExpireTime()
+    private function __getCookieExpireTime(): int
     {
         $time = new Time($this->getConfig('Cookie.expires'));
 
