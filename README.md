@@ -35,7 +35,8 @@ $middleware->push(new \LanguageSwitcher\Middleware\LanguageSwitcherMiddleware([
     'Cookie' => [
         'name' => 'ChoosenLanguage',
         'expires' => '+1 year',
-        'domain' => 'foo.bar'
+        'domain' => 'foo.bar',
+        'canonicalizeLocale' => false
     ],
     'availableLanguages' => [
         'en_US' => 'en_US'
@@ -94,7 +95,8 @@ Inside your app.php add the following to change configs of the plugin:
     'field' => 'language',
     'Cookie' => [
         'name' => 'ChoosenLanguage',
-        'expires' => '+1 year'
+        'expires' => '+1 year',
+        'canonicalizeLocale' => false
     ],
     'availableLanguages' => [
         'en_US'
@@ -115,7 +117,7 @@ Inside your app.php add the following to change configs of the plugin:
 
 - model: The model used in the migration
 - field: The field in the model
-- Cookie: Optionally you can change the cookie name and the expiration date of the cookie.
+- Cookie: Optionally you can change the cookie name, the expiration date of the cookie and define if the locale should be saved canonicalized.
 - availableLanguages: Add language keys
 - displayNames: Should contain the same keys as availableLanguages. Map language key with its Display Name
 - imageMapping: Should contain the same keys as availableLanguages. Map language key with its flag image name. (For all possible flag names open webroot/img/flags)
