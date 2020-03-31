@@ -24,7 +24,8 @@ class LanguageSwitcherMiddleware
         'Cookie' => [
             'name' => 'ChoosenLanguage',
             'expires' => '+1 year',
-            'domain' => ''
+            'domain' => '',
+            'canonicalizeLocale' => true
         ],
         'availableLanguages' => [
             'en_US' => 'en_US'
@@ -117,7 +118,7 @@ class LanguageSwitcherMiddleware
             return $this->__next($request, $response, $next);
         }
         if ($this->__getAllowedLanguages() !== ['*']) {
-            $locale = Locale::lookup($this->__getAllowedLanguages(), $locale, true, Configure::read('App.defaultLocale'));
+            $locale = Locale::lookup($this->__getAllowedLanguages(), $locale, $this->getConfig('Cookie.canonicalizeLocale'), Configure::read('App.defaultLocale'));
             if ($locale === '') {
                 $locale = Configure::read('App.defaultLocale');
             }
