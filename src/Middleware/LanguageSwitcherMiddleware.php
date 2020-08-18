@@ -4,9 +4,11 @@ namespace LanguageSwitcher\Middleware;
 use App\Lib\Environment;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
+use Cake\Http\Cookie\Cookie;
 use Cake\I18n\I18n;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use DateTime;
 use Locale;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -96,13 +98,13 @@ class LanguageSwitcherMiddleware
                 }
             }
 
-            $this->__setCookieAndLocale($user->{$this->getConfig('field')});
+            $response = $this->__setCookieAndLocale($user->{$this->getConfig('field')}, $response);
 
             return $this->__next($request, $response, $next);
         }
 
         if (isset($queryLocale)) {
-            $this->__setCookieAndLocale($queryLocale);
+            $response = $this->__setCookieAndLocale($queryLocale, $response);
 
             return $this->__next($request, $response, $next);
         }
@@ -124,7 +126,7 @@ class LanguageSwitcherMiddleware
             }
         }
         if ($locale || $this->__getAllowedLanguages() === ['*']) {
-            $this->__setCookieAndLocale($locale);
+            $response = $this->__setCookieAndLocale($locale, $response);
         }
 
         return $this->__next($request, $response, $next);
@@ -162,16 +164,25 @@ class LanguageSwitcherMiddleware
      * Set the cookie and the locale
      *
      * @param string $locale locale
-     * @return void
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    private function __setCookieAndLocale($locale)
+    private function __setCookieAndLocale($locale, ResponseInterface $response)
     {
-        // @FIXME Should be refactored when cake 3.4 was released
         if (PHP_SAPI !== 'cli') {
             $time = $this->__getCookieExpireTime();
             I18n::setLocale($locale);
-            setcookie($this->__getCookieName(), $locale, $time, '/', $this->getConfig('Cookie.domain'));
+            
+            $response = $response->withCookie(new Cookie(
+                $this->__getCookieName(),
+                $locale,
+                $time,
+                '/',
+                $this->getConfig('Cookie.domain')
+            ));
         }
+
+        return $response;
     }
 
     /**
@@ -210,12 +221,12 @@ class LanguageSwitcherMiddleware
     /**
      * Get the cookie expiration date
      *
-     * @return int
+     * @return \DateTime
      */
     private function __getCookieExpireTime()
     {
-        $time = new Time($this->getConfig('Cookie.expires'));
+        $time = new DateTime($this->getConfig('Cookie.expires'));
 
-        return $time->toUnixString();
+        return $time;
     }
 }
