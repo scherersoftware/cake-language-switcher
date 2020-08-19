@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace LanguageSwitcher\View\Helper;
 
 use Cake\Core\InstanceConfigTrait;
@@ -11,21 +12,20 @@ use Cake\View\Helper;
  */
 class LanguageSwitcherHelper extends Helper
 {
-
     use InstanceConfigTrait;
 
     protected $_defaultConfig = [
         'availableLanguages' => [
-            'en_US' => 'en_US'
+            'en_US' => 'en_US',
         ],
         'displayNames' => [
-            'en_US' => 'English'
+            'en_US' => 'English',
         ],
         'imageMapping' => [
-            'en_US' => 'United-States'
+            'en_US' => 'United-States',
         ],
         'renderToggleButtonDisplayName' => true,
-        'element' => 'LanguageSwitcher.language_switcher'
+        'element' => 'LanguageSwitcher.language_switcher',
     ];
 
     /**
@@ -39,7 +39,7 @@ class LanguageSwitcherHelper extends Helper
             'availableLanguages' => $this->getConfig('availableLanguages'),
             'displayNames' => $this->getConfig('displayNames'),
             'imageMapping' => $this->getConfig('imageMapping'),
-            'renderToggleButtonDisplayName' => $this->getConfig('renderToggleButtonDisplayName')
+            'renderToggleButtonDisplayName' => $this->getConfig('renderToggleButtonDisplayName'),
         ]);
     }
 
