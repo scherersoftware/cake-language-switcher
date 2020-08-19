@@ -1,12 +1,11 @@
 <?php
+declare(strict_types = 1);
 namespace LanguageSwitcher\Middleware;
 
-use App\Lib\Environment;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Cookie\Cookie;
 use Cake\I18n\I18n;
-use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use DateTime;
 use Locale;
@@ -17,7 +16,6 @@ use Throwable;
 
 class LanguageSwitcherMiddleware
 {
-
     use InstanceConfigTrait;
 
     protected $_defaultConfig = [
@@ -27,13 +25,13 @@ class LanguageSwitcherMiddleware
             'name' => 'ChoosenLanguage',
             'expires' => '+1 year',
             'domain' => '',
-            'canonicalizeLocale' => true
+            'canonicalizeLocale' => true,
         ],
         'availableLanguages' => [
-            'en_US' => 'en_US'
+            'en_US' => 'en_US',
         ],
         'beforeSaveCallback' => null,
-        'additionalConfigFiles' => []
+        'additionalConfigFiles' => [],
     ];
 
     /**
@@ -52,10 +50,9 @@ class LanguageSwitcherMiddleware
     /**
      * Sets the locale to user locale or browser locale
      *
-     * @param ServerRequestInterface $request  The request.
-     * @param ResponseInterface $response The response.
+     * @param \Psr\Http\Message\ServerRequestInterface $request  The request.
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
      * @param callable $next The next middleware to call.
-     *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
@@ -135,10 +132,9 @@ class LanguageSwitcherMiddleware
     /**
      * Calls the next middleware.
      *
-     * @param ServerRequestInterface $request  The request.
-     * @param ResponseInterface $response The response.
+     * @param \Psr\Http\Message\ServerRequestInterface $request  The request.
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
      * @param callable $next The next middleware to call.
-     *
      * @return \Psr\Http\Message\ResponseInterface A response.
      */
     private function __next(ServerRequestInterface $request, ResponseInterface $response, $next)
@@ -150,7 +146,8 @@ class LanguageSwitcherMiddleware
 
     /**
      * Get Query Locale
-     * @param  ServerRequestInterface $request  The request.
+     *
+     * @param  \Psr\Http\Message\ServerRequestInterface $request  The request.
      * @return string       locale string
      */
     private function __getQueryLocale($request)
@@ -172,7 +169,7 @@ class LanguageSwitcherMiddleware
         if (PHP_SAPI !== 'cli') {
             $time = $this->__getCookieExpireTime();
             I18n::setLocale($locale);
-            
+
             $response = $response->withCookie(new Cookie(
                 $this->__getCookieName(),
                 $locale,
